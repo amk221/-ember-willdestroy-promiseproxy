@@ -1,2 +1,5 @@
-{{page-title "Application"}}
-{{outlet}}
+<button type='button' {{on 'click' this.toggle}}>toggle</button>
+
+{{#if this.show}}
+  <MyComponent />
+{{/if}}
