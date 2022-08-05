@@ -6,20 +6,23 @@ export default class MyComponent extends Component {
   @inject store;
 
   @action
-  setup() {
-    this.foo = this.store.createRecord('foo', { name: 'foo 1 ' });
+  async setup() {
+    const { store } = this;
+    const foo = store.createRecord('foo', { name: 'foo 1 ' });
 
-    this.foo
-      .get('bars')
-      .addObject(this.store.createRecord('bar', { name: 'bar 1' }));
+    const bars = await foo.bars;
 
-    this.foo
-      .get('bars')
-      .addObject(this.store.createRecord('bar', { name: 'bar 2' }));
+    bars.addObject(this.store.createRecord('bar', { name: 'bar 1' }));
+    bars.addObject(this.store.createRecord('bar', { name: 'bar 2' }));
+
+    this.foo = foo;
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
+
+    console.log('willDestroy', this.foo.bars.isDestroyed);
+
     this.foo.bars.filter((bar) => {
       console.log(bar);
       return true;
